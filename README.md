@@ -4,5 +4,5 @@ Server for an Event website, which allows you to view Events, create Events and 
 # Setup
 Application was developed with: 
 * Node.js(Express.js) 
-* GraphQL for querries and mutations 
+* GraphQL for Queries and Mutations 
 * MongoDB(database)
