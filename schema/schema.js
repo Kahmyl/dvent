@@ -5,7 +5,6 @@ import Event from '../Models/Event.js'
 import Booking from '../Models/Booking.js'
 import jwt from 'jsonwebtoken'
 import { EventType, UserType, LoginType, BookingType} from './Types.js'
-import { eventQuery } from './EventSchema.js'
 
 
 const {GraphQLObjectType,  GraphQLString, GraphQLList, GraphQLNonNull, GraphQLSchema, GraphQLFloat, GraphQLID} = graphql
