@@ -1,6 +1,10 @@
 import Event from '../Models/Event.js'
 
-export const eventQuery = async (parent, args) => {
-    const singleEvent = await Event.findById(args._id)
-    return singleEvent;
+export const eventResolver = {
+    Query: {
+        events: async (root) => {
+            const allEvents = await Event.find({});
+            return allEvents;
+        }
+    }
 }

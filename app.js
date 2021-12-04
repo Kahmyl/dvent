@@ -4,8 +4,15 @@ import dotenv from "dotenv"
 import { graphqlHTTP } from "express-graphql";
 import schema from './schema/schema.js';
 import isAuth from './Middleware/Auth.js'
+import cors from 'cors'
+import cookieParser from 'cookie-parser'
 
 const app = express();
+
+app.use(cors())
+
+app.use(cookieParser());
+
 
 dotenv.config()
 mongoose.connect(process.env.DVENT_DB_URI, {useNewUrlParser: true})

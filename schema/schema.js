@@ -4,6 +4,7 @@ import User from '../Models/User.js'
 import Event from '../Models/Event.js'
 import Booking from '../Models/Booking.js'
 import jwt from 'jsonwebtoken'
+
 import { EventType, UserType, LoginType, BookingType} from './Types.js'
 
 
@@ -36,35 +37,6 @@ const RootQuery = new GraphQLObjectType({
             }
         },
 
-        login: {
-            type: LoginType,
-            args: {
-                email: {type: GraphQLString},
-                password: {type: GraphQLString}
-            },
-            async resolve(parent, args){
-                const user = await User.findOne({email: args.email});
-                if (!user){
-                    throw new Error('Email does not exist')
-                }else{
-                    const isMatch = await bcrypt.compare(args.password, user.password);
-                    if (!isMatch) {
-                        throw new Error('Incorrect password')
-                    } else {
-                        const token = await jwt.sign({userId:user._id, email:user.email}, 'secret123', {
-                            expiresIn: '1h'
-                        })
-                        const userDetails = await ({
-                            userId: user._id,
-                            token: token,
-                            tokenExpiration: 1
-                        });
-                        return userDetails
-                    }
-                }
-            }
-        },
-
         bookings: {
             type: new GraphQLList(BookingType),
             async resolve(parent, args, req){
@@ -73,6 +45,18 @@ const RootQuery = new GraphQLObjectType({
                 }
                 const allBookings = await Booking.find({});
                 return allBookings
+            }
+        },
+
+        validated: {
+            type: UserType,
+            args:{_id: { type: GraphQLID}},
+            async resolve(parent, args, req){
+                const payload = jwt.verify(req.cookies.token, 'secret123');
+                if (payload){
+                    const singleEvent = await User.findById(payload.userId)
+                    return singleEvent;
+                }
             }
         }
     }
@@ -90,9 +74,13 @@ const Mutation = new GraphQLObjectType({
                 password: {type: new GraphQLNonNull( GraphQLString)}
             },
 
-            async resolve(parent, args) {
-                const user = await User.findOne({email: args.email})
+            async resolve(parent, args, res) {
+                const user = await User.findOne({username: args.username})
+                const user1 = await User.findOne({email: args.email})
                 if(user) {
+                    throw new Error('Username taken')
+                }
+                else if(user1){
                     throw new Error('Email already exists')
                 }else{
                     const user = await new User({
@@ -101,10 +89,52 @@ const Mutation = new GraphQLObjectType({
                         password: args.password
                     });
                     const storeUser = await user.save()
-                    return storeUser;
+                    if (storeUser){
+                        const token = await jwt.sign({userId:user._id, username: user.username, email:user.email}, 'secret123',  {
+                            expiresIn: '1h'
+                        })
+                        const userDetails = await ({
+                            username: user.username,
+                            email: user.email,
+                            token: token,
+                            tokenExpiration: 1
+                        });
+                        return userDetails
+                    }
                 } 
             }
         },
+
+        loginUser: {
+            type: LoginType,
+            args: {
+                identity: {type: GraphQLString},
+                password: {type: GraphQLString}
+            },
+            async resolve(parent, args, context) {
+                const user = await User.findOne({email: args.identity}) || await User.findOne({username: args.identity}) ;
+                if (!user){
+                    throw new Error('Email or Username does not exist')
+                }else{
+                    const isMatch = await bcrypt.compare(args.password, user.password);
+                    if (!isMatch) {
+                        throw new Error('Incorrect password')
+                    } else {
+                        const token = await jwt.sign({userId:user._id, username: user.username, email:user.email}, 'secret123', {
+                            expiresIn: '1h'
+                        })
+                        const userDetails = await ({
+                            username: user.username,
+                            userId: user._id,
+                            token: token,
+                            tokenExpiration: 1
+                        });
+                        return userDetails
+                    }
+                }
+            }   
+        },
+
         createEvent: {
             type: EventType,
             args: {
