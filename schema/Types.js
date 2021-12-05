@@ -36,7 +36,7 @@ export const EventType = new GraphQLObjectType({
         _id: {type: GraphQLID},
         title: {type: GraphQLString},
         description: {type: GraphQLString},
-        price: {type: GraphQLFloat},
+        price: {type: GraphQLString},
         date: {type: GraphQLDateTime},
         user: {
             type: UserType,
@@ -72,6 +72,7 @@ export const LoginType = new GraphQLObjectType({
     name: 'Login',
     fields: () => ({
         userId: {type: GraphQLID},
+        email: {type: GraphQLString},
         username:{type: GraphQLString},
         token: {type: GraphQLString},
         tokenExpiration: {type: GraphQLInt},

@@ -40,25 +40,10 @@ const RootQuery = new GraphQLObjectType({
         bookings: {
             type: new GraphQLList(BookingType),
             async resolve(parent, args, req){
-                if (!req.isAuth){
-                    throw new Error('Not Logged in')
-                }
                 const allBookings = await Booking.find({});
                 return allBookings
             }
         },
-
-        validated: {
-            type: UserType,
-            args:{_id: { type: GraphQLID}},
-            async resolve(parent, args, req){
-                const payload = jwt.verify(req.cookies.token, 'secret123');
-                if (payload){
-                    const singleEvent = await User.findById(payload.userId)
-                    return singleEvent;
-                }
-            }
-        }
     }
 })
 
@@ -125,6 +110,7 @@ const Mutation = new GraphQLObjectType({
                         })
                         const userDetails = await ({
                             username: user.username,
+                            email: user.email,
                             userId: user._id,
                             token: token,
                             tokenExpiration: 1
@@ -140,13 +126,10 @@ const Mutation = new GraphQLObjectType({
             args: {
                 title: {type: new GraphQLNonNull( GraphQLString)},
                 description: {type: new GraphQLNonNull( GraphQLString)},
-                price: {type: new GraphQLNonNull( GraphQLFloat)},
+                price: {type: new GraphQLNonNull( GraphQLString)},
                 user:{type: new GraphQLNonNull(GraphQLID)}
             },
             async resolve(parent, args, req) {
-                if (!req.isAuth){
-                    throw new Error('Not Logged in')
-                }
                 let event = new Event({
                     title: args.title,
                     description: args.description,
@@ -182,9 +165,6 @@ const Mutation = new GraphQLObjectType({
                 BookingId: {type: new GraphQLNonNull(GraphQLID)}
             },
             async resolve(parent, args, req){
-                if (!req.isAuth){
-                    throw new Error('Not Logged in')
-                }
                 await Booking.deleteOne({_id: args.BookingId});
                 const message = 'Unbooked';
                 return message;
