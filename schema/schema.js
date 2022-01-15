@@ -1,4 +1,5 @@
 import graphql from 'graphql';
+import pkg from 'graphql-iso-date';
 import bcrypt from 'bcrypt'
 import User from '../Models/User.js'
 import Event from '../Models/Event.js'
@@ -8,8 +9,8 @@ import jwt from 'jsonwebtoken'
 import { EventType, UserType, LoginType, BookingType} from './Types.js'
 
 
-const {GraphQLObjectType,  GraphQLString, GraphQLList, GraphQLNonNull, GraphQLSchema, GraphQLFloat, GraphQLID} = graphql
-
+const {GraphQLObjectType,  GraphQLString, GraphQLList, GraphQLNonNull, GraphQLSchema, GraphQLID} = graphql
+const { GraphQLDateTime } = pkg;
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
@@ -44,6 +45,29 @@ const RootQuery = new GraphQLObjectType({
                 return allBookings
             }
         },
+
+        booking: {
+            type: BookingType,
+            args:{
+                event: { type: GraphQLID},
+                user:  {type: GraphQLID}
+            },
+            async resolve(parent, args){
+                const singleBook = await Booking.findOne({event: args.event, user: args.user})
+                return singleBook;
+            }
+        },
+
+        ticket: {
+            type: new GraphQLList(BookingType),
+            args:{
+                user:  {type: GraphQLID}
+            },
+            async resolve(parent, args){
+                const Book = await Booking.find({ user: args.user})
+                return Book;
+            }
+        }
     }
 })
 
@@ -76,7 +100,7 @@ const Mutation = new GraphQLObjectType({
                     const storeUser = await user.save()
                     if (storeUser){
                         const token = await jwt.sign({userId:user._id, username: user.username, email:user.email}, 'secret123',  {
-                            expiresIn: '1h'
+                            expiresIn: '24h'
                         })
                         const userDetails = await ({
                             username: user.username,
@@ -106,7 +130,7 @@ const Mutation = new GraphQLObjectType({
                         throw new Error('Incorrect password')
                     } else {
                         const token = await jwt.sign({userId:user._id, username: user.username, email:user.email}, 'secret123', {
-                            expiresIn: '1h'
+                            expiresIn: '24h'
                         })
                         const userDetails = await ({
                             username: user.username,
@@ -126,7 +150,9 @@ const Mutation = new GraphQLObjectType({
             args: {
                 title: {type: new GraphQLNonNull( GraphQLString)},
                 description: {type: new GraphQLNonNull( GraphQLString)},
+                image: {type: new GraphQLNonNull( GraphQLString)},
                 price: {type: new GraphQLNonNull( GraphQLString)},
+                date: {type: new GraphQLNonNull( GraphQLString)},
                 user:{type: new GraphQLNonNull(GraphQLID)}
             },
             async resolve(parent, args, req) {
@@ -134,7 +160,9 @@ const Mutation = new GraphQLObjectType({
                     title: args.title,
                     description: args.description,
                     price: args.price,
-                    user: args.user
+                    date: new Date(args.date),
+                    user: args.user,
+                    image: args.image
                 });
                 const storeEvent = await event.save()
                 return storeEvent;
@@ -148,9 +176,6 @@ const Mutation = new GraphQLObjectType({
                 event:{type: new GraphQLNonNull(GraphQLID)}
             },
             async resolve(parent, args, req) {
-                if (!req.isAuth){
-                    throw new Error('Not Logged in')
-                }
                 let booking = new Booking({
                     event: args.event,
                     user: args.user

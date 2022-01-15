@@ -5,7 +5,7 @@ import pkg from 'graphql-iso-date';
 
 
 const {GraphQLObjectType, GraphQLInt, GraphQLString, GraphQLList, GraphQLFloat, GraphQLID} = graphql
-const { GraphQLDateTime } = pkg;
+const { GraphQLDateTime, GraphQLDate } = pkg;
 
 export const BookingType = new GraphQLObjectType({
     name: 'Booking',
@@ -37,7 +37,8 @@ export const EventType = new GraphQLObjectType({
         title: {type: GraphQLString},
         description: {type: GraphQLString},
         price: {type: GraphQLString},
-        date: {type: GraphQLDateTime},
+        image: {type: GraphQLString},
+        date: {type: GraphQLDate},
         user: {
             type: UserType,
             async resolve(parent, args){
