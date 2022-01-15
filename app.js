@@ -13,6 +13,7 @@ app.use(cors())
 
 app.use(cookieParser());
 
+const port = process.env.PORT || 4000
 
 dotenv.config()
 mongoose.connect(process.env.DVENT_DB_URI, {useNewUrlParser: true})
@@ -27,6 +28,6 @@ app.use('/graphql', graphqlHTTP({
     graphiql: true 
 }));
 
-app.listen(4000, () => {
-    console.log('app listening at port 4000')
+app.listen(port, () => {
+    console.log('app listening at port'+ port)
 });
