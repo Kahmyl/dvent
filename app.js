@@ -21,6 +21,10 @@ mongoose.connection.once('open', () => {
     console.log('connected to database')
 })
 
+app.get('/', function (req, res) {
+    res.send('hello world')
+})
+
 app.use(isAuth);
 
 app.use('/graphql', graphqlHTTP({
