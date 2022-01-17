@@ -2,7 +2,7 @@ import graphql from 'graphql';
 import { eventResolver, eventsResolver, bookingResolver, bookingsResolver, ticketResolver } from './Queries/EventSchema.js';
 import { EventType, UserType, LoginType, BookingType} from './Types.js'
 import { usersResolver } from './Queries/UserSchema.js';
-import { loginResolver, createUserResolver, authResolver} from './mutations/usersMutation.js';
+import { loginResolver, createUserResolver, authResolver, logoutResolver} from './mutations/usersMutation.js';
 import { createEventResolver } from './mutations/eventsMutation.js';
 import { BookEventsResolver } from './mutations/BookingsMutation.js';
 
@@ -72,6 +72,7 @@ const Mutation = new GraphQLObjectType({
             resolve: createUserResolver
         },
 
+
         loginUser: {
             type: LoginType,
             args: {
@@ -80,6 +81,13 @@ const Mutation = new GraphQLObjectType({
             },
             resolve: loginResolver   
         },
+
+        logoutUser: {
+            type: LoginType,
+            args: {username: {type: GraphQLString}},
+            resolve: logoutResolver   
+        },
+
 
         createEvent: {
             type: EventType,
