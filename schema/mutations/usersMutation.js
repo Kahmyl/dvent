@@ -91,7 +91,7 @@ export const logoutResolver = async (parent, args, context) => {
 export const authResolver = async (parent, args, request) => {
     console.log('Cookies' + request.cookies.token)
     console.log('Query' + request.query.token)
-    console.log('Header' + request.req.headers["x-access-token"])
+    console.log('Header' + request.headers["x-access-token"])
     console.log('Body' + request.body.token)
     const payload = jwt.verify(request.cookies.token, 'secret123');
 
