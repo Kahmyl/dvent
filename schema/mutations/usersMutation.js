@@ -86,7 +86,7 @@ export const logoutResolver = async (parent, args, context) => {
 
 
 export const authResolver = async (parent, args, request) => {
-    console.log('Cookies' + request.cookies.token)
+    console.log('Cookies' + request.cookies)
     const payload = jwt.verify(request.cookies.token, 'secret123');
 
     const userInfo = await User.findById(payload.userId)
