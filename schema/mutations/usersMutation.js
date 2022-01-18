@@ -52,6 +52,7 @@ export const loginResolver = async (parent, args, context) => {
                 expiresIn: '24h'
             })
             await context.res.cookie('token', token, {
+                path: '/',
                 httpOnly: true,
                 sameSite: 'lax',
                 maxAge: 1000 * 60 * 60 * 24,
