@@ -52,7 +52,6 @@ export const loginResolver = async (parent, args, context) => {
                 expiresIn: '24h'
             })
             await context.res.cookie('token', token, {
-                path: '/',
                 httpOnly: true,
                 sameSite: 'lax',
                 maxAge: 1000 * 60 * 60 * 24,
@@ -70,7 +69,6 @@ export const loginResolver = async (parent, args, context) => {
 
 export const logoutResolver = async (parent, args, context) => {
     await context.res.cookie('token', '', {
-        path: '/',
         httpOnly: true,
         sameSite: 'lax',
         expires: new Date(0),
@@ -86,7 +84,7 @@ export const logoutResolver = async (parent, args, context) => {
 
 
 export const authResolver = async (parent, args, request) => {
-    console.log('Cookies' + request.cookies)
+    console.log('Cookies' + request.cookies.token)
     const payload = jwt.verify(request.cookies.token, 'secret123');
 
     const userInfo = await User.findById(payload.userId)
