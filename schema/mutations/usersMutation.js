@@ -63,8 +63,9 @@ export const loginResolver = async (parent, args, context) => {
                 username: user.username,
                 email: user.email,
                 userId: user._id,
+                token: token
             });
-            userDetails.token = token
+  
             return userDetails
         }
     }
