@@ -11,7 +11,7 @@ const app = express();
 
 app.use(cors({
     credentials:true,
-    origin:'https://dvents.vercel.app/'
+    origin:'https://dvents.vercel.app'
 }))
 
 // app.use(cors())
