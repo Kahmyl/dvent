@@ -26,7 +26,8 @@ export const createUserResolver = async (parent, args, context) => {
                 // sameSite: 'lax',
                 httpOnly: true,
                 maxAge: 1000 * 60 * 60 * 24,
-                secure: process.env.NODE_ENV === 'production'
+                secure: process.env.NODE_ENV === 'production',
+                domain: '.vercel.app.com'
             })
             const userDetails = await ({
                 username: user.username,
@@ -56,7 +57,8 @@ export const loginResolver = async (parent, args, context) => {
                 httpOnly: true,
                 // sameSite: 'lax',
                 maxAge: 1000 * 60 * 60 * 24,
-                secure: process.env.NODE_ENV === 'production'
+                secure: process.env.NODE_ENV === 'production',
+                domain: '.vercel.app.com'
             })
             const userDetails = await ({
                 username: user.username,
@@ -74,7 +76,8 @@ export const logoutResolver = async (parent, args, context) => {
         httpOnly: true,
         // sameSite: 'lax',
         expires: new Date(0),
-        secure: process.env.NODE_ENV === 'production'
+        secure: process.env.NODE_ENV === 'production',
+        domain: '.vercel.app.com'
     })
 
     const userDetails = await ({
