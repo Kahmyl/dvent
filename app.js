@@ -9,6 +9,8 @@ import cookieParser from 'cookie-parser'
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 app.use(cors({
     credentials:true,
     origin:'https://dvents.vercel.app'
@@ -18,7 +20,6 @@ app.use(cors({
 
 app.use(cookieParser());
 
-app.set("trust proxy", 1);
 
 const port = process.env.PORT || 4000
 
