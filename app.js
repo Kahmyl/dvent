@@ -18,6 +18,8 @@ app.use(cors({
 
 app.use(cookieParser());
 
+app.set("trust proxy", 1);
+
 const port = process.env.PORT || 4000
 
 dotenv.config()
