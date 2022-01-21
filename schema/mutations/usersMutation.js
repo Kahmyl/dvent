@@ -22,11 +22,11 @@ export const createUserResolver = async (parent, args, context) => {
                 expiresIn: '24h'
             })
             await context.res.cookie('token', token, {
-                path: '/',
-                sameSite: 'lax',
+                // path: '/',
+                // sameSite: 'lax',
                 httpOnly: true,
                 maxAge: 1000 * 60 * 60 * 24,
-                secure: process.env.NODE_ENV === 'production'
+                // secure: process.env.NODE_ENV === 'production'
             })
             const userDetails = await ({
                 username: user.username,
@@ -52,11 +52,11 @@ export const loginResolver = async (parent, args, context) => {
                 expiresIn: '24h'
             })
             await context.res.cookie('token', token, {
-                path: '/',
+                // path: '/',
                 httpOnly: true,
-                sameSite: 'lax',
+                // sameSite: 'lax',
                 maxAge: 1000 * 60 * 60 * 24,
-                secure: process.env.NODE_ENV === 'production'
+                // secure: process.env.NODE_ENV === 'production'
             })
             const userDetails = await ({
                 username: user.username,
@@ -70,11 +70,11 @@ export const loginResolver = async (parent, args, context) => {
 
 export const logoutResolver = async (parent, args, context) => {
     await context.res.cookie('token', '', {
-        path: '/',
+        // path: '/',
         httpOnly: true,
-        sameSite: 'lax',
+        // sameSite: 'lax',
         expires: new Date(0),
-        secure: process.env.NODE_ENV === 'production'
+        // secure: process.env.NODE_ENV === 'production'
     })
 
     const userDetails = await ({
@@ -92,7 +92,7 @@ export const authResolver = async (parent, args, request) => {
     const userDetails = await ({
         username: userInfo.username,
         email: userInfo.email,
-        userId: userInfo._id,
+        _id: userInfo._id,
     });
     return userDetails
 }

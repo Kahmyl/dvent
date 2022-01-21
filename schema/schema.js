@@ -1,5 +1,5 @@
 import graphql from 'graphql';
-import { eventResolver, eventsResolver, bookingResolver, bookingsResolver, ticketResolver } from './Queries/EventSchema.js';
+import { eventResolver, eventsResolver, bookingsResolver, ticketResolver } from './Queries/EventSchema.js';
 import { EventType, UserType, LoginType, BookingType} from './Types.js'
 import { usersResolver } from './Queries/UserSchema.js';
 import { loginResolver, createUserResolver, authResolver, logoutResolver} from './mutations/usersMutation.js';
@@ -38,14 +38,14 @@ const RootQuery = new GraphQLObjectType({
             resolve: bookingsResolver
         },
 
-        booking: {
-            type: BookingType,
-            args:{
-                event: { type: GraphQLID},
-                user:  {type: GraphQLID}
-            },
-            resolve: bookingResolver
-        },
+        // booking: {
+        //     type: BookingType,
+        //     args:{
+        //         event: { type: GraphQLID},
+        //         user:  {type: GraphQLID}
+        //     },
+        //     resolve: bookingResolver
+        // },
 
         ticket: {
             type: new GraphQLList(BookingType),
