@@ -23,7 +23,7 @@ export const createUserResolver = async (parent, args, context) => {
             })
             await context.res.cookie('token', token, {
                 // path: '/',
-                // sameSite: 'lax',
+                sameSite: 'none',
                 httpOnly: true,
                 maxAge: 1000 * 60 * 60 * 24,
                 secure: process.env.NODE_ENV === 'production',
@@ -56,7 +56,7 @@ export const loginResolver = async (parent, args, context) => {
                 httpOnly: true,
                 sameSite: 'none',
                 maxAge: 1000 * 60 * 60 * 24,
-                // secure: process.env.NODE_ENV === 'production',
+                secure: process.env.NODE_ENV === 'production',
             })
             const userDetails = await ({
                 username: user.username,
@@ -72,7 +72,7 @@ export const logoutResolver = async (parent, args, context) => {
     await context.res.cookie('token', '', {
         // path: '/',
         httpOnly: true,
-        // sameSite: 'lax',
+        sameSite: 'none',
         expires: new Date(0),
         secure: process.env.NODE_ENV === 'production',
     })
