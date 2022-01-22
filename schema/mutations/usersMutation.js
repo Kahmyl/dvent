@@ -54,7 +54,7 @@ export const loginResolver = async (parent, args, context) => {
             await context.res.cookie('token', token, {
                 // path: '/',
                 httpOnly: true,
-                // sameSite: 'lax',
+                sameSite: 'none',
                 maxAge: 1000 * 60 * 60 * 24,
                 // secure: process.env.NODE_ENV === 'production',
             })
