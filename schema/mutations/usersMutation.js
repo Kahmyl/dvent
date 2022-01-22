@@ -56,7 +56,7 @@ export const loginResolver = async (parent, args, context) => {
                 httpOnly: true,
                 // sameSite: 'lax',
                 maxAge: 1000 * 60 * 60 * 24,
-                secure: process.env.NODE_ENV === 'production',
+                // secure: process.env.NODE_ENV === 'production',
             })
             const userDetails = await ({
                 username: user.username,

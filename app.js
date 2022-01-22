@@ -13,7 +13,7 @@ app.set("trust proxy", 1);
 
 app.use(cors({
     credentials:true,
-    origin:'https://dvents.vercel.app'
+    origin:'http://localhost:3000'
 }))
 
 // app.use(cors())
