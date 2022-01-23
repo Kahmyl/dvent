@@ -38,14 +38,14 @@ const RootQuery = new GraphQLObjectType({
             resolve: bookingsResolver
         },
 
-        // booking: {
-        //     type: BookingType,
-        //     args:{
-        //         event: { type: GraphQLID},
-        //         user:  {type: GraphQLID}
-        //     },
-        //     resolve: bookingResolver
-        // },
+        booking: {
+            type: BookingType,
+            args:{
+                event: { type: GraphQLID},
+                user:  {type: GraphQLID}
+            },
+            resolve: bookingResolver
+        },
 
         ticket: {
             type: new GraphQLList(BookingType),
