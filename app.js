@@ -16,7 +16,6 @@ app.use(cors({
     origin:'https://dvents.vercel.app'
 }))
 
-// app.use(cors())
 
 app.use(cookieParser());
 
