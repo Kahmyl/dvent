@@ -16,10 +16,10 @@ export const bookingsResolver = async () => {
     return allBookings
 }
 
-// export const bookingResolver = async (parent, args) => {
-//     const singleBook = await Booking.find({event: args.event})
-//     return singleBook;
-// }
+export const bookingResolver = async (parent, args) => {
+    const singleBook = await Booking.findOne({event: args.event, user: args.user})
+    return singleBook;
+}
 
 export const ticketResolver = async ( parent, args ) => {
     const Book = await Booking.find({ user: args.user})
